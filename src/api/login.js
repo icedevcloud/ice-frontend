@@ -20,6 +20,22 @@ export function login (parameter) {
   })
 }
 
+export function authToken (parameter) {
+  parameter = {
+    ...parameter,
+    grant_type: 'password',
+    scope: 'app'
+  }
+  return axios({
+    url: '/auth/oauth/token',
+    headers: {
+      'Authorization': 'Basic YXBwOlhjV2ViQXBw'
+    },
+    method: 'post',
+    params: parameter
+  })
+}
+
 export function getSmsCaptcha (parameter) {
   return axios({
     url: api.SendSms,
@@ -31,6 +47,16 @@ export function getSmsCaptcha (parameter) {
 export function getInfo () {
   return axios({
     url: '/user/info',
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function getUserInfo () {
+  return axios({
+    url: '/upms/user/getUserInfo',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
