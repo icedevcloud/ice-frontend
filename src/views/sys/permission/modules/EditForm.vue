@@ -111,6 +111,13 @@
           :wrapperCol="wrapperCol">
           <a-switch v-model="cache" checkedChildren="是" unCheckedChildren="否" />
         </a-form-item>
+
+        <a-form-item
+          label="状态"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol">
+          <a-switch v-model="permStatus" checkedChildren="启用" unCheckedChildren="禁用" defaultChecked />
+        </a-form-item>
       </a-form>
       <div
         :style="{
@@ -157,6 +164,7 @@ export default {
       pid: 0,
       hidden: false,
       cache: true,
+      permStatus: true,
       form: this.$form.createForm(this),
       treeData: [],
       record: {}
@@ -172,6 +180,7 @@ export default {
         this.hidden = record.hidden
         this.cache = record.cache
       }
+      this.permStatus = record.status === 1 ? true : false
       await this.init()
       const { form } = this
       this.$nextTick(() => {
@@ -231,6 +240,7 @@ export default {
             values.cache = this.cache
           }
           values.id = this.record.id
+          values.status = this.permStatus ? 1 : 0
           const { code, message } = await apiUpdatePermission(values)
           if (code === 200) {
             this.$message.success('更新成功')

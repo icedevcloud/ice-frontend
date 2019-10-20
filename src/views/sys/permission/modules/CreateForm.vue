@@ -111,6 +111,13 @@
           :wrapperCol="wrapperCol">
           <a-switch v-model="cache" checkedChildren="是" unCheckedChildren="否" />
         </a-form-item>
+
+        <a-form-item
+          label="状态"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol">
+          <a-switch v-model="permStatus" checkedChildren="启用" unCheckedChildren="禁用" defaultChecked />
+        </a-form-item>
       </a-form>
       <div
         :style="{
@@ -157,6 +164,7 @@ export default {
       typeDisabled: false,
       hidden: false,
       cache: true,
+      permStatus: true,
       form: this.$form.createForm(this),
       treeData: [],
       value: []
@@ -189,6 +197,9 @@ export default {
       }
     },
     async init () {
+      this.hidden = false
+      this.cache = true
+      this.permStatus = true
       const { code, data, message } = await apiGetPermissionMenuTree()
       if (code === 200) {
         const treeData = data
@@ -229,6 +240,7 @@ export default {
             values.hidden = this.hidden
             values.cache = this.cache
           }
+          values.status = this.permStatus ? 1 : 0
           const { code, message } = await apiAddPermission(values)
           if (code === 200) {
             this.$message.success('添加成功')

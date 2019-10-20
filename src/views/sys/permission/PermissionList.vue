@@ -14,7 +14,11 @@
       :pagination="false"
       :dataSource="dataSource">
       <span slot="icon" slot-scope="text">
-        <a-icon :type="text" :spin="true" /> {{text}}
+        <a-icon :type="text" /> {{text}}
+      </span>
+
+      <span slot="status" slot-scope="text">
+        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
 
       <span slot="action" slot-scope="text, record">
@@ -50,6 +54,17 @@ import { STable } from '@/components'
 import CreateForm from './modules/CreateForm'
 import EditForm from './modules/EditForm'
 import { apiGetPermissionTableTree, apiDelPermission } from '@/api/sys/permission'
+
+const statusMap = {
+  0: {
+    status: 'error',
+    text: '禁用'
+  },
+  1: {
+    status: 'success',
+    text: '启用'
+  }
+}
 
 export default {
   name: 'TableList',
@@ -111,7 +126,8 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'status'
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '操作',
@@ -126,12 +142,11 @@ export default {
     }
   },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        1: '正常',
-        2: '禁用'
-      }
-      return statusMap[status]
+    statusFilter (type) {
+      return statusMap[type].text
+    },
+    statusTypeFilter (type) {
+      return statusMap[type].status
     }
   },
   created () {

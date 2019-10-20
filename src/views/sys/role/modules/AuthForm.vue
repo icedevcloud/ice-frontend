@@ -15,6 +15,7 @@
             :expandedKeys="expandedKeys"
             :autoExpandParent="autoExpandParent"
             v-model="checkedKeys"
+            :checkStrictly="true"
             @select="onSelect"
             :treeData="treeData"
           />
@@ -105,7 +106,7 @@ export default {
     },
     async handleSubmit () {
       const roleId = this.roleId
-      const permIds = this.checkedKeys
+      const permIds = this.checkedKeys.checked
       const { code, message } = await apiUpdateRolePermission({ roleId, permIds })
       if (code === 200) {
         this.$message.success('授权成功')

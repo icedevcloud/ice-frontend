@@ -3,24 +3,50 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="8" :sm="24">
-            <a-form-item label="角色ID">
-              <a-input placeholder="请输入"/>
+          <a-col :md="6" :sm="24">
+            <a-form-item label="用户名">
+              <a-input v-model="queryParams[0].value" placeholder="请输入用户名"/>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
-            <a-form-item label="状态">
-              <a-select placeholder="请选择" default-value="0">
-                <a-select-option value="0">全部</a-select-option>
-                <a-select-option value="1">关闭</a-select-option>
-                <a-select-option value="2">运行中</a-select-option>
-              </a-select>
+
+          <a-col :md="6" :sm="24">
+            <a-form-item label="昵称">
+              <a-input v-model="queryParams[1].value" placeholder="请输入昵称"/>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+
+          <template v-if="advanced">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="手机号">
+                <a-input v-model="queryParams[2].value" placeholder="请输入手机号"/>
+              </a-form-item>
+            </a-col>
+
+            <a-col :md="6" :sm="24">
+              <a-form-item label="邮箱">
+                <a-input v-model="queryParams[3].value" placeholder="请输入邮箱"/>
+              </a-form-item>
+            </a-col>
+
+            <a-col :md="6" :sm="8">
+              <a-form-item label="状态">
+                <a-select v-model="queryParams[4].value" placeholder="请选择用户状态查询">
+                  <a-select-option value="">请选择用户状态</a-select-option>
+                  <a-select-option value="1">正常</a-select-option>
+                  <a-select-option value="0">禁用</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+          </template>
+
+          <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary">查询</a-button>
-              <a-button style="margin-left: 8px">重置</a-button>
+              <a-button type="primary" @click="handleOk">查询</a-button>
+              <a-button style="margin-left: 8px"  @click="queryParamReset">重置</a-button>
+               <a @click="toggleAdvanced" style="margin-left: 8px">
+                {{ advanced ? '收起' : '展开' }}
+                <a-icon :type="advanced ? 'up' : 'down'"/>
+              </a>
             </span>
           </a-col>
         </a-row>
@@ -92,7 +118,34 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParams: [
+        {
+          column: 'username',
+          type: 'eq',
+          value: ''
+        },
+        {
+          column: 'nickname',
+          type: 'eq',
+          value: ''
+        },
+        {
+          column: 'phone',
+          type: 'eq',
+          value: ''
+        },
+        {
+          column: 'email',
+          type: 'eq',
+          value: ''
+        },
+        {
+          column: 'status',
+          type: 'eq',
+          value: ''
+        }
+      ],
+      initQueryParams: [],
       // 表头
       columns: [
         {
@@ -134,7 +187,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getUserList(Object.assign(parameter, this.queryParam)).then(res => {
+        return getUserList({ ...parameter, queryParams: this.queryParams }).then(res => {
           return res.data
         })
       }
@@ -149,6 +202,7 @@ export default {
     }
   },
   created () {
+    this.initQueryParams = JSON.parse(JSON.stringify(this.queryParams))
   },
   methods: {
     handleOk () {
@@ -157,6 +211,13 @@ export default {
     handleEdit (record) {
       console.log(record)
       this.$refs.editModal.edit(record)
+    },
+    queryParamReset () {
+      this.queryParams = JSON.parse(JSON.stringify(this.initQueryParams))
+      this.handleOk()
+    },
+    toggleAdvanced () {
+      this.advanced = !this.advanced
     },
     async handleDelUser (id) {
       const { code, message } = await apiDelUser(id)
