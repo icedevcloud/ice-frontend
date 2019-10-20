@@ -17,10 +17,10 @@
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="账号: admin"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入账号名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -32,7 +32,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="请输入密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -41,6 +41,24 @@
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
+
+          <a-row :gutter="0">
+            <a-col :span="16">
+              <a-form-item>
+                <a-input
+                  size="large"
+                  type="text"
+                  :maxlength="4"
+                  placeholder="请输入验证码"
+                  v-decorator="['code',{rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
+                  <a-icon slot="prefix" type="code" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                </a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <img class="code-img" :src="authCode.imgSrc" @click="genCode">
+            </a-col>
+          </a-row>
         </a-tab-pane>
         <a-tab-pane key="tab2" tab="手机号登录">
           <a-form-item>
@@ -115,7 +133,6 @@
 </template>
 
 <script>
-import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
@@ -140,6 +157,10 @@ export default {
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
         smsSendBtn: false
+      },
+      authCode: {
+        imgSrc: '',
+        randomNumber: ''
       }
     }
   },
@@ -152,6 +173,7 @@ export default {
         this.requiredTwoStepCaptcha = false
       })
     // this.requiredTwoStepCaptcha = true
+    this.genCode()
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
@@ -181,7 +203,7 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
+      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password', 'code'] : ['mobile', 'captcha']
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
@@ -189,7 +211,7 @@ export default {
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
+          loginParams.randomNumber = this.authCode.randomNumber
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
@@ -202,6 +224,17 @@ export default {
           }, 600)
         }
       })
+    },
+    guid () {
+      function S4 () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+      }
+      return (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4())
+    },
+    genCode () {
+      const uid = this.guid()
+      this.authCode.randomNumber = uid
+      this.authCode.imgSrc = '/auth/image-code/' + uid
     },
     getCaptcha (e) {
       e.preventDefault()
@@ -313,5 +346,9 @@ export default {
       float: right;
     }
   }
+}
+.code-img {
+  width: 100px;
+  margin-left: 15px;
 }
 </style>
