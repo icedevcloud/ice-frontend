@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
   if (Vue.ls.get(ACCESS_TOKEN)) {
     /* has token */
     if (to.path === '/user/login') {
-      next({ path: '/dashboard/workplace' })
+      next({ path: '/dashboard' })
       NProgress.done()
     } else {
       if (store.getters.roles.length === 0) {
@@ -26,6 +26,7 @@ router.beforeEach((to, from, next) => {
           .dispatch('GetInfo')
           .then(res => {
             const roles = res.result && res.result.role
+            // 调用 vuex 的 从后端获取用户的路由菜单，动态添加可访问路由表
             store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
