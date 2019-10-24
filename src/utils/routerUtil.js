@@ -1,5 +1,5 @@
 import { axios } from '@/utils/request'
-import { asyncRouterMap } from '@/config/router.config'
+// import { asyncRouterMap } from '@/config/router.config'
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 
@@ -18,7 +18,8 @@ const constantRouterComponents = {
   SysUserList: () => import('@/views/sys/user/UserList'),
   SysRoleList: () => import('@/views/sys/role/RoleList'),
   SysPermissionList: () => import('@/views/sys/permission/PermissionList'),
-  SysDict: () => import('@/views/sys/dict/DictList')
+  SysDict: () => import('@/views/sys/dict/DictList'),
+  SysDept: () => import('@/views/sys/dept/DeptList')
   // ...more
 }
 
