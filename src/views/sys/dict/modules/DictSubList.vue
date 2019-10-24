@@ -11,8 +11,8 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="字典名称">
-              <a-input v-model="queryParams[0].value" placeholder="请输入字典名称"/>
+            <a-form-item label="名称">
+              <a-input v-model="queryParams[0].value" placeholder="请输入名称"/>
             </a-form-item>
           </a-col>
 
@@ -114,7 +114,7 @@ export default {
           dataIndex: 'id'
         },
         {
-          title: '字典名称',
+          title: '名称',
           dataIndex: 'name'
         },
         {

@@ -10,10 +10,10 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item
-          label="字典名称"
+          label="名称"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol">
-          <a-input v-decorator="['name', {rules: [{required: true, message: '请输入字典名称！'}]}]" />
+          <a-input v-decorator="['name', {rules: [{required: true, message: '请输入名称！'}]}]" />
         </a-form-item>
 
         <a-form-item

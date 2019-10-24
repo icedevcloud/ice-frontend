@@ -52,6 +52,20 @@
         </a-form-item>
 
         <a-form-item
+          label="部门"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol">
+          <a-tree-select
+            :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+            allowClear
+            treeDefaultExpandAll
+            :treeData="treeData"
+            v-decorator="['deptId', {rules: []}]"
+            @change="onTreeSelectChange">
+          </a-tree-select>
+        </a-form-item>
+
+        <a-form-item
           label="状态"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol">
@@ -65,6 +79,7 @@
 <script>
 import { apiAddUser } from '@/api/sys/user'
 import { apiQueryRole } from '@/api/sys/role'
+import { getDeptTree } from '@/api/sys/dept'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 
 export default {
@@ -85,16 +100,18 @@ export default {
       roleIds: [],
       roleList: [],
       status: true,
+      treeData: [],
       form: this.$form.createForm(this)
     }
   },
   methods: {
-    add () {
+    async add () {
       this.form = this.$form.createForm(this)
       this.visible = true
       this.roleIds = []
       this.status = true
-      this.queryRole('')
+      await this.queryRole('')
+      await this.getDeptTree()
     },
     handleCancel () {
       this.visible = false
@@ -131,8 +148,28 @@ export default {
     handleSearchRole (e) {
       this.queryRole(e)
     },
+    async getDeptTree () {
+      const { code, data } = await getDeptTree()
+      if (code === 200) {
+        this.treeData = data
+        this.genTreeData(this.treeData)
+      }
+    },
+    genTreeData (treeData) {
+      treeData.map(item => {
+        item.key = item.id
+        item.value = item.id
+        if (item.children) {
+          this.genTreeData(item.children)
+        }
+      })
+    },
     handleChange (e) {
       this.roleIds = e
+    },
+    onTreeSelectChange (value) {
+      const { form } = this
+      form.setFieldsValue({ deptId: value })
     }
   }
 }

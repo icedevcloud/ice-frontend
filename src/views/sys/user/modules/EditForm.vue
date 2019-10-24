@@ -52,6 +52,20 @@
         </a-form-item>
 
         <a-form-item
+          label="部门"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol">
+          <a-tree-select
+            :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+            allowClear
+            treeDefaultExpandAll
+            :treeData="treeData"
+            v-decorator="['deptId', {rules: []}]"
+            @change="onTreeSelectChange">
+          </a-tree-select>
+        </a-form-item>
+
+        <a-form-item
           label="状态"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol">
@@ -66,6 +80,7 @@
 import pick from 'lodash.pick'
 import { apiUpdateUser, apiUserRolesInfo } from '@/api/sys/user'
 import { apiQueryRole } from '@/api/sys/role'
+import { getDeptTree } from '@/api/sys/dept'
 
 export default {
   data () {
@@ -84,26 +99,32 @@ export default {
       roleIds: [],
       roleList: [],
       status: true,
+      treeData: [],
       form: this.$form.createForm(this),
 
       record: {}
     }
   },
   methods: {
-    edit (record) {
-      this.record = record
-      this.status = !!record.status
+    async edit (record) {
       this.form = this.$form.createForm(this)
       const { form } = this
-      apiUserRolesInfo(record.id).then(res => {
-        const { data } = res
+      this.record = record
+      this.status = !!record.status
+      const { code, data, message } = await apiUserRolesInfo(record.id)
+      if (code === 200) {
         this.roleIds = data.roleIds
-        const formData = pick(data, ['avatar', 'username', 'nickname', 'phone', 'email', 'status'])
-        form.setFieldsValue(formData)
-      })
+        this.$nextTick(() => {
+          const formData = pick(data, ['username', 'nickname', 'phone', 'email', 'deptId', 'status'])
+          form.setFieldsValue(formData)
+        })
+      } else {
+        this.$message.warning(message)
+        return
+      }
       this.visible = true
-      this.queryRole('')
-      // this.form = { id, avatar, username, nickname, phone, email, status }
+      await this.queryRole('')
+      await this.getDeptTree()
     },
     handleCancel () {
       this.visible = false
@@ -141,8 +162,28 @@ export default {
     handleSearchRole (e) {
       this.queryRole(e)
     },
+    async getDeptTree () {
+      const { code, data } = await getDeptTree()
+      if (code === 200) {
+        this.treeData = data
+        this.genTreeData(this.treeData)
+      }
+    },
+    genTreeData (treeData) {
+      treeData.map(item => {
+        item.key = item.id
+        item.value = item.id
+        if (item.children) {
+          this.genTreeData(item.children)
+        }
+      })
+    },
     handleChange (e) {
       this.roleIds = e
+    },
+    onTreeSelectChange (value) {
+      const { form } = this
+      form.setFieldsValue({ deptId: value })
     }
   }
 }
