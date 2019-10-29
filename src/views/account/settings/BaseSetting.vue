@@ -2,103 +2,92 @@
   <div class="account-settings-info-view">
     <a-row :gutter="16">
       <a-col :md="24" :lg="16">
-
-        <a-form layout="vertical">
+        <a-form :form="form" layout="vertical">
           <a-form-item
-            label="昵称"
-          >
-            <a-input placeholder="给自己起个名字" />
+            label="用户名">
+            <a-input :disabled="true" v-decorator="['username']" />
           </a-form-item>
+
           <a-form-item
-            label="Bio"
-          >
-            <a-textarea rows="4" placeholder="You are not alone."/>
+            label="昵称">
+            <a-input v-decorator="['nickname', {rules: [{required: true, message: '请输入昵称！'}]}]" placeholder="给自己起个名字" />
+          </a-form-item>
+
+          <a-form-item
+            label="手机号"
+            :required="false">
+            <a-input v-decorator="['phone', {rules: [{required: true, message: '请输入手机号！'},{pattern: '^1[3456789]\\d{9}$', message: '手机号格式错误！'}]}]" placeholder="请输入手机号"/>
           </a-form-item>
 
           <a-form-item
             label="电子邮件"
-            :required="false"
-          >
-            <a-input placeholder="exp@admin.com"/>
-          </a-form-item>
-          <a-form-item
-            label="加密方式"
-            :required="false"
-          >
-            <a-select defaultValue="aes-256-cfb">
-              <a-select-option value="aes-256-cfb">aes-256-cfb</a-select-option>
-              <a-select-option value="aes-128-cfb">aes-128-cfb</a-select-option>
-              <a-select-option value="chacha20">chacha20</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item
-            label="连接密码"
-            :required="false"
-          >
-            <a-input placeholder="h3gSbecd"/>
-          </a-form-item>
-          <a-form-item
-            label="登录密码"
-            :required="false"
-          >
-            <a-input placeholder="密码"/>
+            :required="false">
+            <a-input v-decorator="['email', {rules: [{required: true, message: '请输入邮箱！'},{pattern: '\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}', message: '邮箱格式错误！'}]}]" placeholder="请输入电子邮件"/>
           </a-form-item>
 
           <a-form-item>
-            <a-button type="primary">提交</a-button>
-            <a-button style="margin-left: 8px">保存</a-button>
+            <a-button type="primary" @click="handleSubmit">保存</a-button>
           </a-form-item>
         </a-form>
 
       </a-col>
       <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <div class="ant-upload-preview" @click="$refs.modal.edit(1)" >
-          <a-icon type="cloud-upload-o" class="upload-icon"/>
-          <div class="mask">
-            <a-icon type="plus" />
-          </div>
-          <img :src="option.img"/>
+        <div class="ant-upload-preview">
+          <img :src="userInfo.avatar"/>
         </div>
       </a-col>
 
     </a-row>
-
-    <avatar-modal ref="modal">
-
-    </avatar-modal>
   </div>
 </template>
 
 <script>
-import AvatarModal from './AvatarModal'
+import pick from 'lodash.pick'
+import { apiGetUserInfo, apiUpdateUser } from '@/api/sys/user'
 
 export default {
   components: {
-    AvatarModal
   },
   data () {
     return {
-      // cropper
-      preview: {},
-      option: {
-        img: '/avatar2.jpg',
-        info: true,
-        size: 1,
-        outputType: 'jpeg',
-        canScale: false,
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
-        // 开启宽度和高度比例
-        fixed: true,
-        fixedNumber: [1, 1]
-      }
+      form: this.$form.createForm(this),
+      userInfo: {}
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
-
+    async init () {
+      const { code, data, message } = await apiGetUserInfo()
+      const { form } = this
+      if (code === 200) {
+        this.$nextTick(() => {
+          const formData = pick(data, ['username', 'nickname', 'phone', 'email'])
+          form.setFieldsValue(formData)
+          this.userInfo = data
+        })
+      } else {
+        this.$message.warning(message)
+      }
+    },
+    handleSubmit () {
+      const { form: { validateFields } } = this
+      validateFields(async (errors, values) => {
+        if (!errors) {
+          console.log('values', values)
+          values.id = this.userInfo.id
+          const { code, message } = await apiUpdateUser(values)
+          this.init()
+          if (code === 200) {
+            this.$message.success('更新成功')
+          } else {
+            this.$message.warning(message)
+          }
+        } else {
+        }
+      })
+    }
   }
 }
 </script>
