@@ -45,3 +45,10 @@ export function apiDelUser (id) {
     method: 'DELETE'
   })
 }
+
+export function apiGetUserInfo () {
+  return axios({
+    url: `${api.user}/getUserInfo`,
+    method: 'GET'
+  })
+}
