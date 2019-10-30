@@ -32,6 +32,14 @@ export function apiUpdateUser (parameter) {
   })
 }
 
+export function apiUpdateMyUser (parameter) {
+  return axios({
+    url: `${api.user}/updateUser`,
+    method: 'PUT',
+    data: parameter
+  })
+}
+
 export function apiUserRolesInfo (id) {
   return axios({
     url: api.userRolesInfo + `/${id}`,

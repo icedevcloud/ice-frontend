@@ -43,7 +43,7 @@
 
 <script>
 import pick from 'lodash.pick'
-import { apiGetUserInfo, apiUpdateUser } from '@/api/sys/user'
+import { apiGetUserInfo, apiUpdateMyUser } from '@/api/sys/user'
 
 export default {
   components: {
@@ -77,7 +77,7 @@ export default {
         if (!errors) {
           console.log('values', values)
           values.id = this.userInfo.id
-          const { code, message } = await apiUpdateUser(values)
+          const { code, message } = await apiUpdateMyUser(values)
           this.init()
           if (code === 200) {
             this.$message.success('更新成功')
