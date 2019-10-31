@@ -42,7 +42,7 @@
           <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="handleOk">查询</a-button>
-              <a-button style="margin-left: 8px"  @click="queryParamReset">重置</a-button>
+              <a-button style="margin-left: 8px" @click="queryParamReset">重置</a-button>
                <a @click="toggleAdvanced" style="margin-left: 8px">
                 {{ advanced ? '收起' : '展开' }}
                 <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -150,32 +150,49 @@ export default {
       columns: [
         {
           title: 'ID',
+          align: 'center',
           dataIndex: 'id'
         },
         {
           title: '用户名',
+          align: 'center',
           dataIndex: 'username'
         },
         {
           title: '昵称',
+          align: 'center',
           dataIndex: 'nickname'
         },
         {
           title: '头像',
+          align: 'center',
           dataIndex: 'avatar'
         },
         {
           title: '手机号',
+          align: 'center',
           dataIndex: 'phone'
         },
         {
           title: '邮箱',
+          align: 'center',
           dataIndex: 'email'
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '创建时间',
+          align: 'center',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '更新时间',
+          align: 'center',
+          dataIndex: 'updateTime'
         },
         {
           title: '操作',

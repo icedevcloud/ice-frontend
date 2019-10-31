@@ -136,24 +136,39 @@ export default {
       columns: [
         {
           title: 'ID',
+          align: 'center',
           dataIndex: 'id'
         },
         {
           title: '角色名',
+          align: 'center',
           dataIndex: 'name'
         },
         {
           title: '角色编码',
+          align: 'center',
           dataIndex: 'roleCode'
         },
         {
           title: '描述',
+          align: 'center',
           dataIndex: 'description'
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '创建时间',
+          align: 'center',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '更新时间',
+          align: 'center',
+          dataIndex: 'updateTime'
         },
         {
           title: '操作',

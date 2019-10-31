@@ -18,11 +18,7 @@
           <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="handleOk">查询</a-button>
-              <a-button style="margin-left: 8px"  @click="queryParamReset">重置</a-button>
-               <!--<a @click="toggleAdvanced" style="margin-left: 8px">-->
-                <!--{{ advanced ? '收起' : '展开' }}-->
-                <!--<a-icon :type="advanced ? 'up' : 'down'"/>-->
-              <!--</a>-->
+              <a-button style="margin-left: 8px" @click="queryParamReset">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -102,18 +98,22 @@ export default {
       columns: [
         {
           title: 'ID',
+          align: 'center',
           dataIndex: 'id'
         },
         {
           title: '名称',
+          align: 'center',
           dataIndex: 'name'
         },
         {
           title: '类型',
+          align: 'center',
           dataIndex: 'type'
         },
         {
           title: '描述',
+          align: 'center',
           dataIndex: 'description'
         },
         {

@@ -14,7 +14,7 @@
       :pagination="false"
       :dataSource="dataSource">
       <span slot="icon" slot-scope="text">
-        <a-icon :type="text" /> {{text}}
+        <a-icon :type="text" />{{ text }}
       </span>
 
       <span slot="status" slot-scope="text">
@@ -97,36 +97,44 @@ export default {
       columns: [
         {
           title: 'id',
+          align: 'center',
           dataIndex: 'id'
         },
         {
           title: '权限名称',
+          align: 'center',
           dataIndex: 'title'
         },
         {
           title: '路由名称',
+          align: 'center',
           dataIndex: 'name'
         },
         {
           title: '前端路径',
+          align: 'center',
           dataIndex: 'path'
         },
         {
           title: '组件',
+          align: 'center',
           dataIndex: 'component'
         },
         {
           title: '图标',
           dataIndex: 'icon',
+          align: 'center',
           scopedSlots: { customRender: 'icon' }
         },
         {
           title: '排序',
+          align: 'center',
           dataIndex: 'sort'
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' }
         },
         {
