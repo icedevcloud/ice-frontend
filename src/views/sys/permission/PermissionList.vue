@@ -97,7 +97,6 @@ export default {
       columns: [
         {
           title: 'id',
-          align: 'center',
           dataIndex: 'id'
         },
         {
