@@ -70,6 +70,7 @@ export default {
       },
       visible: false,
       confirmLoading: false,
+
       optType: 0, // 0 一级部门 1 子部门
       pid: '',
 
@@ -80,22 +81,25 @@ export default {
     async add () {
       await this.getDeptTree()
       this.form = this.$form.createForm(this)
-      this.visible = true
       this.optType = 0
+
+      this.visible = true
+      this.confirmLoading = false
     },
     async addSub (pid) {
-      console.log(pid)
       await this.getDeptTree()
       this.form = this.$form.createForm(this)
-      this.visible = true
       this.pid = pid
+      this.optType = 1
+      this.visible = true
+
       if (pid) {
         const { form } = this
         this.$nextTick(() => {
           form.setFieldsValue({ pid: pid })
         })
       }
-      this.optType = 1
+      this.confirmLoading = false
     },
     async getDeptTree () {
       const { code, data } = await getDeptTree()

@@ -66,6 +66,7 @@ export default {
     add () {
       this.form = this.$form.createForm(this)
       this.visible = true
+      this.confirmLoading = false
     },
     handleCancel () {
       this.visible = false
@@ -75,7 +76,6 @@ export default {
       this.confirmLoading = true
       validateFields(async (errors, values) => {
         if (!errors) {
-          console.log('values', values)
           values.status = values.status ? 1 : 0
           const { code, message } = await apiAddRole(values)
           this.confirmLoading = false

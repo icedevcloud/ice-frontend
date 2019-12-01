@@ -44,6 +44,7 @@
       :columns="columns"
       :data="loadData"
       showPagination="auto"
+      :scroll="{ x: 1200 }"
     >
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
@@ -147,10 +148,21 @@ export default {
           scopedSlots: { customRender: 'status' }
         },
         {
+          title: '创建时间',
+          align: 'center',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '更新时间',
+          align: 'center',
+          dataIndex: 'updateTime'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          fixed: 'right'
         }
       ],
       // 加载数据方法 必须为 Promise 对象

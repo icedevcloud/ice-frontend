@@ -67,18 +67,18 @@ export default {
   },
   methods: {
     edit (record) {
+      this.form = this.$form.createForm(this)
+      this.visible = true
+      this.confirmLoading = true
+
       this.record = record
       this.status = !!record.status
-      this.form = this.$form.createForm(this)
       const { form } = this
-      console.log(Object.assign({}, record))
       this.$nextTick(() => {
         const formData = pick(record, ['name', 'roleCode', 'description', 'status'])
-        console.log('formData', formData)
         form.setFieldsValue(formData)
       })
-      this.visible = true
-      // this.form = { id, avatar, username, nickname, phone, email, status }
+      this.confirmLoading = false
     },
     handleCancel () {
       this.visible = false
@@ -88,7 +88,6 @@ export default {
       this.confirmLoading = true
       validateFields(async (errors, values) => {
         if (!errors) {
-          console.log('values', values)
           values.id = this.record.id
           values.status = values.status ? 1 : 0
           const { code, message } = await apiUpdateRole(values)

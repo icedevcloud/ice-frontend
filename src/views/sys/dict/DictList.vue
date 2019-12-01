@@ -117,6 +117,16 @@ export default {
           dataIndex: 'description'
         },
         {
+          title: '创建时间',
+          align: 'center',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '更新时间',
+          align: 'center',
+          dataIndex: 'updateTime'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: 'center',

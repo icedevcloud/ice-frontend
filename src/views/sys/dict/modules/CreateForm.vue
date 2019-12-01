@@ -84,6 +84,7 @@ export default {
       },
       visible: false,
       confirmLoading: false,
+
       pid: '',
       dictType: '',
       dictStatus: true,
@@ -96,20 +97,22 @@ export default {
     add (optType) {
       this.form = this.$form.createForm(this)
       this.visible = true
+
       this.optType = 0
       this.dictStatus = true
+      this.confirmLoading = false
     },
     addSub (pid, dictType) {
       this.form = this.$form.createForm(this)
       this.visible = true
+
       this.pid = pid
       this.optType = 1
-
-      console.log(dictType)
       this.$nextTick(() => {
         const { form } = this
         form.setFieldsValue({ type: dictType })
       })
+      this.confirmLoading = false
     },
     handleCancel () {
       this.visible = false

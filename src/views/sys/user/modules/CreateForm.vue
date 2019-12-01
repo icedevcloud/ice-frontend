@@ -33,7 +33,7 @@
             @change="handleChange"
             v-model="roleIds"
             placeholder="请选择角色">
-            <a-select-option :value="item.id" v-for="item in roleList" :key="item.id">{{item.name}}</a-select-option>
+            <a-select-option :value="item.id" v-for="item in roleList" :key="item.id">{{ item.name }}</a-select-option>
           </a-select>
         </a-form-item>
 
@@ -108,10 +108,13 @@ export default {
     async add () {
       this.form = this.$form.createForm(this)
       this.visible = true
+
+      this.confirmLoading = true
       this.roleIds = []
       this.status = true
       await this.queryRole('')
       await this.getDeptTree()
+      this.confirmLoading = false
     },
     handleCancel () {
       this.visible = false
@@ -121,7 +124,6 @@ export default {
       this.confirmLoading = true
       validateFields(async (errors, values) => {
         if (!errors) {
-          console.log('values', values)
           values.roleIds = this.roleIds
           values.status = this.status ? 1 : 0
           const { code, message } = await apiAddUser(values)

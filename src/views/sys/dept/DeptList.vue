@@ -15,7 +15,6 @@
               :selectedKeys="selectedKeys"
               :expandedKeys="expandedKeys"
               :autoExpandParent="autoExpandParent"
-              v-model="checkedKeys"
               :checkStrictly="true"
               @select="onSelect"
               :treeData="treeData"
@@ -57,12 +56,12 @@ export default {
         xs: { span: 24 },
         sm: { span: 16 }
       },
-      confirmLoading: true,
-      expandedKeys: [], // 展开节点
-      autoExpandParent: true,
-      checkedKeys: [], // 选中节点
-      selectedKeys: [],
       treeData: [], // trrs数据
+
+      expandedKeys: [], // 展开节点
+      autoExpandParent: true, // 是否自动展开父节点
+      selectedKeys: [],
+      selectRecord: {}, // 选中记录
       form: this.$form.createForm(this)
     }
   },
@@ -83,13 +82,13 @@ export default {
       // if not set autoExpandParent to false, if children expanded, parent can not collapse.
       // or, you can remove all expanded children keys.
       this.expandedKeys = expandedKeys
-      this.autoExpandParent = false
     },
     onSelect (selectedKeys, info) {
       console.log('onSelect', selectedKeys, info)
       this.selectedKeys = selectedKeys
       const record = info.node.dataRef
       const selected = info.selected
+      this.selectRecord = record
       console.log(record, info.selected)
       this.$refs.editForm.edit(record, selected)
     },
@@ -97,11 +96,11 @@ export default {
       if (optType === 0) {
         this.$refs.createForm.add()
       } else if (optType === 1) {
-        this.$refs.createForm.addSub(this.selectedKeys[0])
+        this.$refs.createForm.addSub(this.selectRecord.id)
       }
     },
     async handleDelDept () {
-      const id = this.selectedKeys[0]
+      const id = this.selectRecord.id
       if (id === undefined) {
         this.$message.warning('请选择部门')
       } else {

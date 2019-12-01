@@ -85,6 +85,7 @@ export default {
       },
       visible: false,
       confirmLoading: false,
+
       dictStatus: true,
       optType: 0, // 添加字典类型 0 父级 1 子集
       record: {},
@@ -103,22 +104,23 @@ export default {
       this.$nextTick(() => {
         const formData = pick(record, ['name', 'type', 'description'])
         form.setFieldsValue(formData)
-        // const formData = pick(record, ['name', 'type', 'value', 'sort', 'description'])
-        // form.setFieldsValue(formData)
       })
+      this.confirmLoading = false
     },
     editSub (record) {
       this.form = this.$form.createForm(this)
       this.visible = true
+
       this.optType = 1
       this.record = record
-      this.dictStatus = record.status === 1 ? true : false
+      this.dictStatus = record.status === 1
 
       const { form } = this
       this.$nextTick(() => {
         const formData = pick(record, ['name', 'type', 'code', 'value', 'sort', 'description'])
         form.setFieldsValue(formData)
       })
+      this.confirmLoading = false
     },
     handleCancel () {
       this.visible = false

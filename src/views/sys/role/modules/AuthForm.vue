@@ -7,34 +7,37 @@
       :visible="visible"
       :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
     >
-      <a-form>
-        <a-form-item>
-          <a-tree
-            checkable
-            @expand="onExpand"
-            :expandedKeys="expandedKeys"
-            :autoExpandParent="autoExpandParent"
-            v-model="checkedKeys"
-            :checkStrictly="true"
-            @select="onSelect"
-            :treeData="treeData"
-          />
-        </a-form-item>
-      </a-form>
-      <div :style="{position: 'absolute',left: 0,bottom: 0,width: '100%',borderTop: '1px solid #e9e9e9',padding: '10px 16px',background: '#fff',textAlign: 'right',}">
-        <a-dropdown style="float: left" :trigger="['click']" placement="topCenter">
-          <a-menu slot="overlay">
-            <a-menu-item key="3" @click="handleCheckAll">全部勾选</a-menu-item>
-            <a-menu-item key="4" @click="handleCancelCheckall">取消全选</a-menu-item>
-            <a-menu-item key="5" @click="handleExpandAll">展开所有</a-menu-item>
-            <a-menu-item key="6" @click="handleCloseAll">合并所有</a-menu-item>
-          </a-menu>
-          <a-button>
-            更多操作 <a-icon type="up" />
-          </a-button>
-        </a-dropdown>
-        <a-button :style="{marginRight: '8px'}" @click="onClose">取消</a-button>
-        <a-button @click="handleSubmit" type="primary">确认</a-button>
+      <a-spin :spinning="confirmLoading"/>
+      <div v-if="!confirmLoading">
+        <a-form>
+          <a-form-item>
+            <a-tree
+              checkable
+              @expand="onExpand"
+              :expandedKeys="expandedKeys"
+              :autoExpandParent="autoExpandParent"
+              v-model="checkedKeys"
+              :checkStrictly="true"
+              @select="onSelect"
+              :treeData="treeData"
+            />
+          </a-form-item>
+        </a-form>
+        <div :style="{position: 'absolute',left: 0,bottom: 0,width: '100%',borderTop: '1px solid #e9e9e9',padding: '10px 16px',background: '#fff',textAlign: 'right',}">
+          <a-dropdown style="float: left" :trigger="['click']" placement="topCenter">
+            <a-menu slot="overlay">
+              <a-menu-item key="3" @click="handleCheckAll">全部勾选</a-menu-item>
+              <a-menu-item key="4" @click="handleCancelCheckall">取消全选</a-menu-item>
+              <a-menu-item key="5" @click="handleExpandAll">展开所有</a-menu-item>
+              <a-menu-item key="6" @click="handleCloseAll">合并所有</a-menu-item>
+            </a-menu>
+            <a-button>
+              更多操作 <a-icon type="up" />
+            </a-button>
+          </a-dropdown>
+          <a-button :style="{marginRight: '8px'}" @click="onClose">取消</a-button>
+          <a-button @click="handleSubmit" type="primary">确认</a-button>
+        </div>
       </div>
     </a-drawer>
   </div>
@@ -57,6 +60,8 @@ export default {
         sm: { span: 16 }
       },
       visible: false,
+      confirmLoading: true,
+
       expandedKeys: [], // 展开节点
       autoExpandParent: true,
       checkedKeys: [], // 选中节点
@@ -70,17 +75,24 @@ export default {
     }
   },
   methods: {
-    add (record) {
+    async add (record) {
+      this.visible = true
+      this.confirmLoading = true
+
       this.expandedKeys = []
       this.checkedKeys = []
       this.treeData = []
       this.roleId = record.id
-      apiPermissionTree(record.id).then(res => {
-        this.treeData = res.data.record
-        this.checkedKeys = res.data.ids
+      const { code, data, message } = await apiPermissionTree(record.id)
+      if (code === 200) {
+        this.treeData = data.record
+        this.checkedKeys = data.ids
         this.handleExpandAll()
-        this.visible = true
-      })
+      } else {
+        this.$message.warning(message)
+        this.visible = false
+      }
+      this.confirmLoading = false
     },
     genPermissionTreeIds (record, ids) {
       record.map(item => {

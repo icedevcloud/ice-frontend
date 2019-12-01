@@ -161,7 +161,6 @@ export default {
   },
   methods: {
     async loadData () {
-      console.log('getPermissionTableTree')
       this.dataSource = []
       const { code, data, message } = await apiGetPermissionTableTree()
       if (code === 200) {

@@ -179,7 +179,6 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log('loadData.parameter', parameter)
         return getRoleList({ ...parameter, queryParams: this.queryParams }).then(res => {
           return res.data
         })
@@ -202,7 +201,6 @@ export default {
       this.$refs.table.refresh()
     },
     handleEdit (record) {
-      console.log(record)
       this.$refs.editModal.edit(record)
     },
     queryParamReset () {

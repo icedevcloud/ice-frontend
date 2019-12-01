@@ -33,7 +33,7 @@
             @change="handleChange"
             v-model="roleIds"
             placeholder="请选择角色">
-            <a-select-option :value="item.id" v-for="item in roleList" :key="item.id">{{item.name}}</a-select-option>
+            <a-select-option :value="item.id" v-for="item in roleList" :key="item.id">{{ item.name }}</a-select-option>
           </a-select>
         </a-form-item>
 
@@ -108,9 +108,12 @@ export default {
   methods: {
     async edit (record) {
       this.form = this.$form.createForm(this)
-      const { form } = this
+      this.visible = true
+      this.confirmLoading = true
+
       this.record = record
       this.status = !!record.status
+      const { form } = this
       const { code, data, message } = await apiUserRolesInfo(record.id)
       if (code === 200) {
         this.roleIds = data.roleIds
@@ -122,9 +125,9 @@ export default {
         this.$message.warning(message)
         return
       }
-      this.visible = true
       await this.queryRole('')
       await this.getDeptTree()
+      this.confirmLoading = false
     },
     handleCancel () {
       this.visible = false
@@ -134,7 +137,6 @@ export default {
       this.confirmLoading = true
       validateFields(async (errors, values) => {
         if (!errors) {
-          console.log('values', values)
           values.id = this.record.id
           values.roleIds = this.roleIds
           values.status = values.status ? 1 : 0

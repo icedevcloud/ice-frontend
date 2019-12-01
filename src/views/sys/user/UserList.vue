@@ -43,7 +43,7 @@
             <span class="table-page-search-submitButtons">
               <a-button type="primary" @click="handleOk">查询</a-button>
               <a-button style="margin-left: 8px" @click="queryParamReset">重置</a-button>
-               <a @click="toggleAdvanced" style="margin-left: 8px">
+              <a @click="toggleAdvanced" style="margin-left: 8px">
                 {{ advanced ? '收起' : '展开' }}
                 <a-icon :type="advanced ? 'up' : 'down'"/>
               </a>
@@ -66,6 +66,9 @@
       :data="loadData"
       showPagination="auto"
     >
+      <span slot="avatar" slot-scope="avatar">
+        <a-avatar :src="avatar" />
+      </span>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -166,7 +169,8 @@ export default {
         {
           title: '头像',
           align: 'center',
-          dataIndex: 'avatar'
+          dataIndex: 'avatar',
+          scopedSlots: { customRender: 'avatar' }
         },
         {
           title: '手机号',
@@ -203,7 +207,6 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log('loadData.parameter', parameter)
         return getUserList({ ...parameter, queryParams: this.queryParams }).then(res => {
           return res.data
         })
@@ -226,7 +229,6 @@ export default {
       this.$refs.table.refresh()
     },
     handleEdit (record) {
-      console.log(record)
       this.$refs.editModal.edit(record)
     },
     queryParamReset () {
