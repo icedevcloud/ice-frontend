@@ -63,7 +63,7 @@ import { TableExt } from '@/components'
 import CreateForm from './modules/CreateForm'
 import EditForm from './modules/EditForm'
 import DictSubList from './modules/DictSubList'
-import { getDictList, apiDelDict } from '@/api/sys/dict'
+import { getPageList, apiDelDict } from '@/api/sys/dict'
 
 export default {
   name: 'TableList',
@@ -136,7 +136,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getDictList({ ...parameter, queryParams: this.queryParams }).then(res => {
+        return getPageList({ ...parameter, queryParams: this.queryParams }).then(res => {
           return res.data
         })
       }

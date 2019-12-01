@@ -85,7 +85,7 @@ import { TableExt } from '@/components'
 import CreateForm from './modules/CreateForm'
 import EditForm from './modules/EditForm'
 import AuthForm from './modules/AuthForm'
-import { getRoleList, apiDelRole } from '@/api/sys/role'
+import { getPageList, apiDelRole } from '@/api/sys/role'
 
 const statusMap = {
   0: {
@@ -179,7 +179,7 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getRoleList({ ...parameter, queryParams: this.queryParams }).then(res => {
+        return getPageList({ ...parameter, queryParams: this.queryParams }).then(res => {
           return res.data
         })
       }

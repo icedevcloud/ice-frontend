@@ -8,7 +8,7 @@ const api = {
 
 export default api
 
-export function getUserList (parameter) {
+export function getPageList (parameter) {
   return axios({
     url: api.userPage,
     method: 'POST',

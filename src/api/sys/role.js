@@ -10,7 +10,7 @@ const api = {
 
 export default api
 
-export function getRoleList (parameter) {
+export function getPageList (parameter) {
   return axios({
     url: api.rolePage,
     method: 'POST',

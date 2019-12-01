@@ -8,7 +8,7 @@ const api = {
 
 export default api
 
-export function getDictList (parameter) {
+export function getPageList (parameter) {
   return axios({
     url: api.dictPage,
     method: 'POST',
