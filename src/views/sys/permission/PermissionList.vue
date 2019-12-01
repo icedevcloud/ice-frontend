@@ -3,6 +3,7 @@
 
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.createModal.add()">添加</a-button>
+      <a-button icon="reload" @click="handleOk">刷新</a-button>
     </div>
 
     <a-table
