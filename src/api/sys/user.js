@@ -2,8 +2,8 @@ import { axios } from '@/utils/request'
 
 const api = {
   user: '/upms/user',
-  userRolesInfo: '/upms/user/userRolesInfo',
-  userPage: '/upms/user/page'
+  userPage: '/upms/user/page',
+  userRolesInfo: '/upms/user/userRolesInfo'
 }
 
 export default api

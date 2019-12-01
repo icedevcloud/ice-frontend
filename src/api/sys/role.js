@@ -2,10 +2,10 @@ import { axios } from '@/utils/request'
 
 const api = {
   role: '/upms/role',
+  rolePage: '/upms/role/page',
   permissionTree: '/upms/role/permissionTree',
   updateRolePermission: '/upms/role/updateRolePermission',
-  queryRole: '/upms/role/queryRole',
-  rolePage: '/upms/role/page'
+  queryRole: '/upms/role/queryRole'
 }
 
 export default api
