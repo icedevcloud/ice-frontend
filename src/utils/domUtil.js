@@ -16,4 +16,4 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = 'ice-cloud'
+export const domTitle = 'IceDevCloud'
