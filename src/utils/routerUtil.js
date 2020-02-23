@@ -19,7 +19,9 @@ const constantRouterComponents = {
   SysRoleList: () => import('@/views/sys/role/RoleList'),
   SysPermissionList: () => import('@/views/sys/permission/PermissionList'),
   SysDict: () => import('@/views/sys/dict/DictList'),
-  SysDept: () => import('@/views/sys/dept/DeptList')
+  SysDept: () => import('@/views/sys/dept/DeptList'),
+  DrawReport: () => import('@/views/report/drawReport/DrawReport'),
+  showReport: () => import('@/views/report/showReport/ReportList')
   // ...more
 }
 
