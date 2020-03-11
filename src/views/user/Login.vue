@@ -240,7 +240,7 @@ export default {
     genCode () {
       const uid = this.guid()
       this.authCode.randomNumber = uid
-      this.authCode.imgSrc = '/auth/image-code/' + uid
+      this.authCode.imgSrc = '/oauth/image-code/' + uid
     },
     getCaptcha (e) {
       e.preventDefault()

@@ -27,7 +27,7 @@ export function authToken (parameter) {
     scope: 'app'
   }
   return axios({
-    url: '/auth/oauth/token',
+    url: '/oauth/token',
     headers: {
       'Authorization': 'Basic YXBwOlhjV2ViQXBw'
     },
@@ -66,7 +66,7 @@ export function getUserInfo () {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url: '/oauth/token/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
