@@ -119,12 +119,12 @@ export default {
         {
           title: '创建时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'gmtCreate'
         },
         {
           title: '更新时间',
           align: 'center',
-          dataIndex: 'updateTime'
+          dataIndex: 'gmtModified'
         },
         {
           title: '操作',
